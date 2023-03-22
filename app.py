@@ -1,20 +1,12 @@
-from flask import Flask, request, jsonify
+from flask import Flask
 
 app = Flask(__name__)
 
-@app.route('/', methods=['POST'])
-def webhook():
-    req = request.get_json()
-    # обработка запроса
-    res = {
-        "version": req['version'],
-        "session": req['session'],
-        "response": {
-            "text": "Hello, world!",
-            "end_session": False
-        }
-    }
-    return jsonify(res)
+
+@app.route('/')
+def hello_world():  # put application's code here
+    return 'Hello World!'
+
 
 if __name__ == '__main__':
-    app.run(port=8080, host='0.0.0.0')
+    app.run()
