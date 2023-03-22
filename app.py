@@ -23,7 +23,6 @@ def request_handler():
 
     return webhook(session), 200
 
-
 def run():
     print(' * Use ngrok to tunnel your localhost to Aimylogic.'
           '\n * ./ngrok http 5000 || ngrok.exe http 5000 (windows)'
