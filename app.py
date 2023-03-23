@@ -30,7 +30,7 @@ def run():
           '\n * ./ngrok http 5000 || ngrok.exe http 5000 (windows)'
           '\n * This will generate temporary URL in terminal.  Copy it and paste into the field named "Webhook for tests" in your bot\'s settings. '
           'All requests to your webhook will go to your local machine while you test your bot scenario via a test widget on Aimylogic.')
-    app.run()
+    app.run(host='0.0.0.0', port=5000)
 
 
 if __name__ == "__main__":
