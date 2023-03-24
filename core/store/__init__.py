@@ -1,1 +1,1 @@
-from .stats import stats, return_stats
+from .store import stats, return_stats

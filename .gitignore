@@ -8,5 +8,6 @@
 *.pif
 *.vb
 *.wsf
+.env
 /dist
 /.idea
