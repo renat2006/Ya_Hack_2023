@@ -1,13 +1,10 @@
 import os
 import random
 
-from dotenv import load_dotenv, find_dotenv
 import openai
 import re
 
 from core.store import locations, translations
-
-load_dotenv(find_dotenv())
 
 openai.api_key = os.getenv('GPT3TOKEN')
 
