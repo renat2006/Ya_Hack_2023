@@ -5,7 +5,7 @@ class Player:
     def __init__(self, name, race):
         self.name = name
         self.race = race
-
+        self.health = 10 + (race.stats["constitution"] + race.stats["strength"]) / 1.5
         self.stats = race.stats
         self.inventory = []
 

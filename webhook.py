@@ -1,21 +1,18 @@
 import json
 from pprint import pprint
 
+from core.Logic.ai_funcs import generate_location
+from core.store import locations
+
 
 def webhook(session):
     action = session['action']
 
-    if action == 'event1':
+    if action == 'dragon':
         print('Received request from event1 action')
-        session['variable1'] = "value1"
+        session['location'] = generate_location(locations['dungeon'])
 
-    elif action == 'event2':
-        print('Received request from event2 action')
-        session['variable2'] = "value2"
 
-    elif action == 'event3':
-        print('Received request from event3 action')
-        session['variable3'] = "value3"
 
     else:
         print('Unknown action. Session data:')

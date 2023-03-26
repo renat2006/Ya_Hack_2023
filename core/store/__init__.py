@@ -1,1 +1,1 @@
-from .store import stats, return_stats
+from .store import stats, translations, enemies, artefacts, locations
