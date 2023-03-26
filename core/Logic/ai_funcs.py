@@ -6,7 +6,7 @@ import re
 
 from core.store import locations, translations
 
-openai.api_key = os.getenv('GPT3TOKEN')
+openai.api_key = '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'
 
 
 def generate_location(location):

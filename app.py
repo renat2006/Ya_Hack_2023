@@ -8,9 +8,9 @@ from webhook import webhook
 app = Flask(__name__)
 
 app.debug = True
+app.config['TESTING'] = True
 
-
-
+app.testing = True
 @app.route('/', methods=['POST', 'GET'])
 def request_handler():
     if request.method == 'GET':
