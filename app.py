@@ -1,16 +1,58 @@
 # -*- coding: utf-8 -*-
+
 import os
 from flask import Flask
 from flask import request
-from webhook import webhook
 
+from webhook import webhook
 
 app = Flask(__name__)
 
 app.debug = True
-app.config['TESTING'] = True
 
-app.testing = True
+
+
+def create_table(user_id):
+    import sqlite3
+
+    conn = sqlite3.connect('locations.db')
+    print(user_id)
+    conn.execute(f'''CREATE TABLE IF NOT EXISTS user_{user_id}
+                     (id INTEGER PRIMARY KEY,
+                     location_name TEXT,
+                     description TEXT,
+                      game_count_number INTEGER);''')
+
+    conn.close()
+
+
+def get_game_count(user_id):
+    import sqlite3
+
+    conn = sqlite3.connect('locations.db')
+    cursor = conn.cursor()
+    cursor.execute(f"SELECT game_count FROM user_{user_id} WHERE user_id = ?", (user_id,))
+    result = cursor.fetchone()
+    return result[0]
+
+
+def add_new_location(user_id, location_name, description):
+    import sqlite3
+    conn = sqlite3.connect('locations.db')
+
+    conn.execute(f"INSERT INTO user_{user_id} (location_name, description, game_count_number) VALUES (?, ?, ?)",
+                 (location_name, description, 1))
+    conn.commit()
+    conn.close()
+
+
+def callback(future, user_id, location_name):
+    print('dfdf')
+    result = future.result()
+    print(result)
+    add_new_location(user_id, location_name, result)
+
+
 @app.route('/', methods=['POST', 'GET'])
 def request_handler():
     if request.method == 'GET':
@@ -37,4 +79,5 @@ def run():
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
+
     app.run()
