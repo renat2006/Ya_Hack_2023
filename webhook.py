@@ -2,7 +2,7 @@ import json
 import random
 from pprint import pprint
 
-from core.store import stats, hero_description
+from core.store import stats, hero_description, locations
 
 
 def create_table(user_id):
@@ -29,6 +29,16 @@ def get_game_count(user_id):
     return result[0]
 
 
+def get_location(location_type):
+    import sqlite3
+
+    conn = sqlite3.connect('locations.db')
+    cursor = conn.cursor()
+    cursor.execute(f"SELECT * FROM locations WHERE location_type = ?", (location_type,))
+    result = cursor.fetchall()
+    return result
+
+
 def add_new_location(user_id, location_name, description):
     import sqlite3
     conn = sqlite3.connect('locations.db')
@@ -49,6 +59,7 @@ def webhook(session):
     print('hey')
 
     if action == 'hero_introduction':
+        session["location_number"] = 0
         hero_list = list(stats.keys())
         players = {}
         for player in session["Names"]:
@@ -62,8 +73,10 @@ def webhook(session):
         hero_prompt += ". Пропусти их (он обращается к охранику) - они со мной."
         session["hero_prompt"] = hero_prompt
 
-
-
+    elif action == 'location':
+        locations_data = get_location(list(locations.keys())[session["location_number"]])
+        location_data = random.choice(locations_data)
+        session["location_description"] = location_data[2]
     else:
         print('Unknown action. Session data:')
         pprint(session)
