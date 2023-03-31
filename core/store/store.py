@@ -55,12 +55,29 @@ artefact_effects = {
     "dragon_amulet": [(1, "dexterity"), (1, "strength")]
 
 }
+
 locations = {
     "dungeon": {"description": "это маленькое подземелье, слабо освещено",
                 "enemies": [(3, "skeleton"), (1, "loupgarou")],
-                "artefacts": [(10, "health_posion")], "max_artefacts": 2},
+                "artefacts": [(10, "health_posion")], "max_artefacts": 2, "prehistory": "test1"},
     "treasury": {"description": "это сокровищница", "enemies": [(2, "skeleton")],
                  "artefacts": [(10, "health_posion"), (5, "strength_posion"), (5, "dexterity_posion"),
                                (1, "dragon_amulet")],
-                 "max_artefacts": 4}
+                 "max_artefacts": 4, "prehistory": "test2"},
+    "forest": {"description": "....", "enemies": [(2, "skeleton")],
+               "artefacts": [(10, "health_posion"), (5, "strength_posion"), (5, "dexterity_posion"),
+                             (1, "dragon_amulet")],
+               "max_artefacts": 4, "prehistory": "test3"},
+    "desert": {"description": "....", "enemies": [(2, "skeleton")],
+               "artefacts": [(10, "health_posion"), (5, "strength_posion"), (5, "dexterity_posion"),
+                             (1, "dragon_amulet")],
+               "max_artefacts": 4, "prehistory": "test4"},
+    "ice_world": {"description": "....", "enemies": [(2, "skeleton")],
+                  "artefacts": [(10, "health_posion"), (5, "strength_posion"), (5, "dexterity_posion"),
+                                (1, "dragon_amulet")],
+                  "max_artefacts": 4, "prehistory": "test5"},
+    "castle": {"description": "....", "enemies": [(2, "skeleton")],
+               "artefacts": [(10, "health_posion"), (5, "strength_posion"), (5, "dexterity_posion"),
+                             (1, "dragon_amulet")],
+               "max_artefacts": 4, "prehistory": "test6"}
 }
