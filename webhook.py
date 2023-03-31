@@ -120,9 +120,9 @@ def webhook(session):
         turns_text = ""
         for i, entity in turns.items():
             if entity["type"] == "player":
-                turns_text += f"{int(i) + 1} ходит {entity['name']}, "
+                turns_text += f"{int(i) + 1}-ым ходит {entity['name']}, "
             else:
-                turns_text += f"{int(i) + 1} ходит {translations[entity['name'].split('-')[0]]}-{entity['name'].split('-')[1]}, "
+                turns_text += f"{int(i) + 1}-ым ходит {translations[entity['name'].split('-')[0]]}-{entity['name'].split('-')[1]}, "
         session["turns_text"] = turns_text
 
 
