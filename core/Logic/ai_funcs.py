@@ -3,7 +3,8 @@
 import openai
 from core.store import locations, translations
 
-openai.api_key = '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'
+openai.api_key = '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'
+
 
 
 def generate_location(location):

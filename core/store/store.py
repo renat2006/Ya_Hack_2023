@@ -45,7 +45,7 @@ abilities = {
         "usage_prompt": "Твой магический посох пополняет здоровье всех игроков",
 
         "type": "heal_all",
-        "max_effect": 6
+        "max_effect": 2
 
     },
     "smash": {
@@ -75,6 +75,8 @@ abilities = {
 
 }
 translations = {
+    'strength': 'Сила', 'dexterity': 'Ловкость', 'constitution': 'Массивность', 'intelligence': 'Внимательность',
+    'wisdom': 'Мудрость', 'charisma': 'Харизма', 'health': "Здоровье",
     "human": "Человек",
     "elf": "Эльф",
     "dwarf": "Дварф",
@@ -94,6 +96,11 @@ translations = {
     "death_worm": "Песчанный червь",
     "zimogor": "Зимогор",
     "ghost": "Призрак",
+    "healing": "Лечение природы",
+    "smash": "Минута молчания",
+    "fast": "Быстрее света",
+    "shield": "Живой щит",
+    "super": "Сокрушающий удар Саурона"
 }
 hero_description = {
     "human": "человек, готовый защищать свою семью и соратников, даже ценой своей жизни",
@@ -169,10 +176,20 @@ artefact_effects = {
     "pardise_flower": [(2, "health")]
 
 }
+artefact_type = {
+    "health_posion": "temporary",
+    "strength_posion": "temporary",
+    "dexterity_posion": "temporary",
+    "dragon_amulet": "all_time",
+    "gemstone": "all_time",
+    "sands_of_time": "all_time",
+    "crown_of_mind": "all_time",
+    "pardise_flower": "temporary""temporary"
+}
 
 locations = {
     "dungeon": {"description": "это маленькое подземелье, слабо освещено",
-                "enemies": [(1, "skeleton"), (2, "skeleton"), (1, "loupgarou")],
+                "enemies": [(2, "skeleton"), (1, "loupgarou")],
                 "artefacts": [(5, "health_posion"), (3, "strength_posion")], "max_artefacts": 2,
                 "prehistory": "После нескольких дней блужданий по пустоши ваша команда находит вход в подземелье. Вот и начало вашего непростого пути. Вы спускаетесь в темную пещеру."},
     "treasury": {"description": "это сокровищница", "enemies": [(2, "skeleton"), (1, "dragon")],
