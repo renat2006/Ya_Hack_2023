@@ -86,6 +86,7 @@ translations = {
     "skeleton": "Скелет",
     "health_posion": "Зелье здоровья",
     "strength_posion": "Зелье силы",
+    "dexterity_posion": "Зелье ловкости",
     "loupgarou": "Лугару",
     "troll": "Тролль",
     "spider": "Паук",
@@ -186,7 +187,27 @@ artefact_type = {
     "crown_of_mind": "all_time",
     "pardise_flower": "temporary""temporary"
 }
-
+locations_data_files = {
+    "dungeon": {
+        "sound": '<speaker audio="dialogs-upload/187f71d1-318e-40e1-9000-547de379a961/0a7826e5-7e13-4188-adfc-1714b24b85f3.opus">',
+        "image": "https://i.postimg.cc/63qT8BSm/dungeon.jpg"
+    },
+    "treasury": {
+        "sound": '<speaker audio="dialogs-upload/187f71d1-318e-40e1-9000-547de379a961/f61f874f-6f61-4ac8-966f-8002c04971eb.opus">',
+        "image": "https://i.postimg.cc/5tLq0qhr/treasuary.jpg"},
+    "forest": {
+        "sound": '<speaker audio="dialogs-upload/187f71d1-318e-40e1-9000-547de379a961/cfbb5272-e294-4970-8889-b0e16f0642fc.opus">',
+        "image": "https://i.postimg.cc/LX4Ypt2L/forest.jpg"},
+    "desert": {
+        "sound": '<speaker audio="dialogs-upload/187f71d1-318e-40e1-9000-547de379a961/96d61279-180b-450c-97eb-e96ac3bd9e16.opus">',
+        "image": "https://i.postimg.cc/W1KJ0FmP/desert.jpg"},
+    "ice_world": {
+        "sound": '<speaker audio="dialogs-upload/187f71d1-318e-40e1-9000-547de379a961/77b017c8-8f8e-4168-8434-732ebaaf012e.opus">',
+        "image": "https://i.postimg.cc/v8N1Jxjx/ice-world.jpg"},
+    "castle": {
+        "sound": '<speaker audio="dialogs-upload/187f71d1-318e-40e1-9000-547de379a961/8d8ca0b7-00d8-43d6-a156-d1c9ed91a1bc.opus">',
+        "image": "https://i.postimg.cc/pLDp5GdK/castle.jpg"}
+}
 locations = {
     "dungeon": {"description": "это маленькое подземелье, слабо освещено",
                 "enemies": [(2, "skeleton"), (1, "loupgarou")],
@@ -201,7 +222,7 @@ locations = {
                "enemies": [(2, "skeleton"), (1, "troll"), (2, "spider")],
                "artefacts": [(3, "health_posion"), (4, "pardise_flower"), (2, "dexterity_posion"), (3, "gemstone")],
                "max_artefacts": 3,
-               "prehistory": "После победы над драконом и получения артефактов вы проходите через одну из комнат, которую ранее не видели, в один момент дверь позади вас закрылась, и вы остались запертыми внутри. После тщательного исследования вы поняли, что это был механизм безопасности, который запускался, когда кто-то проходил через дверь в определенное время. Вы осмотрели комнату и нашли панель управления, которой удалось открыть дверь. Они вышли из нее и обнаружили, что находятся на поверхности, прямо на опушке леса."},
+               "prehistory": "После получения артефактов вы проходите через одну из комнат, которую ранее не видели, в один момент дверь позади вас закрылась, и вы остались запертыми внутри. После тщательного исследования вы поняли, что это был механизм безопасности, который запускался, когда кто-то проходил через дверь в определенное время. Вы осмотрели комнату и нашли панель управления, которой удалось открыть дверь. Вы вышли из нее и обнаружили, что находитесь на поверхности, прямо на опушке леса."},
     "desert": {"description": "это пустыня драконов, где тяжело найти что-то живое",
                "enemies": [(3, "skeleton"), (2, "death_worm")],
                "artefacts": [(3, "health_posion"), (2, "sands_of_time"), (5, "dexterity_posion")],

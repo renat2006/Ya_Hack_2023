@@ -4,7 +4,7 @@ from pprint import pprint
 import pymorphy3
 
 from core.store import stats, hero_description, locations, enemies, translations, hero_attack_prompt, \
-    enemies_attack_prompt, abilities, artefact_type, artefact_effects
+    enemies_attack_prompt, abilities, artefact_type, artefact_effects, locations_data_files
 
 
 def make_agree_with_num(word, num):
@@ -174,6 +174,8 @@ def webhook(session):
             "mobs": list(eval(location_data[3])),
             "artefacts": list(eval(location_data[4]))
         }
+        session["location_image"] = locations_data_files[str(location_data[1])]["image"]
+        session["location_sound"] = locations_data_files[str(location_data[1])]["sound"]
         print(session["cur_location_info"])
         turns = {}
         enemies_dict = {}
@@ -258,11 +260,13 @@ def webhook(session):
             session['cur_turn_count'] = 0
             for ability in list(abilities.values()):
                 session["effects_running"][ability["type"]] = max(0, session["effects_running"][ability["type"]] - 1)
-                if session["location_env"]["artefact_part"]:
-                    session["new_location"] = 1
-                    session["location_number"] += 1
-                    if len(list(locations.keys())) == session["location_number"]:
-                        session["new_location"] = 2
+            if session["location_env"]["artefact_part"]:
+                session["new_location"] = 1
+                session["location_number"] += 1
+                print('Смена Локации')
+                if len(list(locations.keys())) == session["location_number"]:
+                    print('Финал')
+                    session["new_location"] = 2
         else:
             session['cur_turn_count'] += 1
     elif action == 'target_check':
@@ -298,9 +302,11 @@ def webhook(session):
         session['artefact_use_response'] = artefact_use_response
     elif action == 'artefact_part':
         artefact_part_response = ""
+        print("артефакты", session["cur_location_info"]["artefacts"])
         artefacts = list(session["cur_location_info"]["artefacts"])
 
-        if session["roll_dice_result"] + session["players_data"][session["cur_person_name"]]["stats"]["intelligence"] < 12 or not artefacts:
+        if session["roll_dice_result"] + session["players_data"][session["cur_person_name"]]["stats"][
+            "intelligence"] < 12 or artefacts == []:
             artefact_part_response += "К сожалению вы не нашли никаких артефактов"
         else:
             found_artefact = random.choice(artefacts)
@@ -313,7 +319,7 @@ def webhook(session):
                 ar_dp += f'{effect} к {make_agree_with_num(translations[effect_name], effect)}, '
             ar_dp = ar_dp[:-2]
             artefact_part_response += f'Поздравляю вы нашли {translations[found_artefact]}, он даёт {ar_dp}.'
-            session["artefact_part_response"] = artefact_part_response
+        session["artefact_part_response"] = artefact_part_response
     elif action == 'enemy_move':
         print("enemy_move")
         target = random.choice(list(session['players_data'].keys()))
@@ -356,7 +362,7 @@ def webhook(session):
             session = enemy_death(session, target)
             if not session["cur_loc_enemies"]:
                 attack_response += "Поздравляю герои, все враги повержены. Теперь у вас есть возможность найти артефакты или использовать их. Но у вас есть всего один ход! Так что выбирайте с умом"
-
+                session['cur_turn_count'] = -1
         session["attack_response"] = attack_response
     elif action == 'ability_help':
         player_hero_type = session["players"][session["cur_person_name"]]
@@ -413,6 +419,7 @@ def webhook(session):
                     ability_response += f'{session["cur_person_name"]}, {random.choice(hero_attack_prompt[player_hero_type]["last"])}. {translations[e.split("-")[0]]}-{e.split("-")[1]} повержен. '
                     if not session["cur_loc_enemies"]:
                         ability_response += "Поздравляю герои, все враги повержены. Теперь у вас есть возможность найти артефакты или использовать их. Но у вас есть всего один ход! Так что выбирайте с умом"
+                        session['cur_turn_count'] = -1
         elif ability["type"] == "attack_block":
             session["effects_running"][ability["type"]] += ability["max_effect"]
 
@@ -428,6 +435,7 @@ def webhook(session):
                 ability_response += f'{session["cur_person_name"]}, {random.choice(hero_attack_prompt[player_hero_type]["last"])}. {translations[e.split("-")[0]]}-{e.split("-")[1]} повержен. '
                 if not session["cur_loc_enemies"]:
                     ability_response += "Поздравляю герои, все враги повержены. Теперь у вас есть возможность найти артефакты или использовать их. Но у вас есть всего один ход! Так что выбирайте с умом"
+                    session['cur_turn_count'] = -1
         session["players_data"][session["cur_person_name"]]["abilities_left"] -= 1
         session[
             "ability_response"] = ability_response
