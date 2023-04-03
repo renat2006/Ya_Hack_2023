@@ -1,11 +1,11 @@
 stats = {
-    "human": {'strength': 4, 'dexterity': 5, 'constitution': 5, 'intelligence': 6, 'wisdom': 6, 'charisma': 8,
+    "human": {'strength': 5, 'dexterity': 5, 'constitution': 5, 'intelligence': 6, 'wisdom': 6, 'charisma': 8,
               'health': 15, "abilities": "shield"},
-    "elf": {'strength': 2, 'dexterity': 7, 'constitution': 3, 'intelligence': 7, 'wisdom': 7, 'charisma': 6,
+    "elf": {'strength': 3, 'dexterity': 7, 'constitution': 3, 'intelligence': 7, 'wisdom': 7, 'charisma': 6,
             'health': 13, "abilities": "fast"},
     "dwarf": {'strength': 7, 'dexterity': 3, 'constitution': 5, 'intelligence': 3, 'wisdom': 3, 'charisma': 4,
               'health': 17, "abilities": "super"},
-    "wizard": {'strength': 3, 'dexterity': 5, 'constitution': 4, 'intelligence': 6, 'wisdom': 7, 'charisma': 5,
+    "wizard": {'strength': 4, 'dexterity': 5, 'constitution': 4, 'intelligence': 6, 'wisdom': 7, 'charisma': 5,
                'health': 14, "abilities": "healing"},
     "giant": {'strength': 9, 'dexterity': 2, 'constitution': 9, 'intelligence': 2, 'wisdom': 2, 'charisma': 3,
               'health': 22, "abilities": "smash"}
@@ -55,10 +55,10 @@ abilities = {
         "max_effect": 1
     },
     "fast": {
-        "description": "Эта способность наносит всем врагам 2 урона",
+        "description": "Эта способность наносит всем врагам 3 урона",
         "usage_prompt": "Твои стрелы пронзили противников",
         "type": "attack_all",
-        "max_effect": 2
+        "max_effect": 3
     },
     "shield": {
         "description": "Эта способность делает тебя невосприимчивым к урону на два хода",

@@ -122,6 +122,7 @@ def webhook(session):
     print('hey')
 
     if action == 'hero_introduction':
+        session["coins"] = 0
         session["location_number"] = 0
         hero_list = list(stats.keys())
         players = {}
@@ -182,7 +183,9 @@ def webhook(session):
         for count, enemy in eval(location_data[3]):
             for num in range(count):
                 enemies_dict[f"{enemy}-{num + 1}"] = enemies[enemy]
-        enemies_dict = dict(sorted(enemies_dict.items(), key=lambda item: item[1]["health"]))
+
+        enemies_dict = dict(sorted(enemies_dict.items(), key=lambda x: x[1]["health"]))
+
         session["cur_loc_enemies"] = enemies_dict
 
         entities = list(session["players"].keys()) + list(session["cur_loc_enemies"].keys())
@@ -217,18 +220,23 @@ def webhook(session):
         session["turns"] = update_turns(session)
 
         session["last_enemies_names"] = list(
-            map(lambda x: f'{x.split("-")[0]}-{x.split("-")[1]}', list(session["cur_loc_enemies"].keys())))
+            map(lambda x: f'{translations[x.split("-")[0]]}-{x.split("-")[1]}',
+                list(session["cur_loc_enemies"].keys())))
         session["last_enemies_names_text"] = '. '.join(session["last_enemies_names"])
         session["cur_person_name"] = session["turns"][str(session["cur_turn_count"])]["name"]
         session["cur_person_type"] = session["turns"][str(session["cur_turn_count"])]["type"]
+
         # ---------- update effects
 
         if session["cur_person_type"] == "player":
+            session["entity_name"] = session["cur_person_name"]
             for effect in session["players_data"][session["cur_person_name"]]["effects"]:
                 if not session["effects_running"][effect]:
                     session["players_data"][session["cur_person_name"]]["effects"].pop(
                         session["players_data"][session["cur_person_name"]]["effects"].index(effect))
-
+        else:
+            session[
+                "entity_name"] = f'{translations[session["cur_person_name"].split("-")[0]]}-{session["cur_person_name"].split("-")[1]}'
         session["cur_loc_enemies"] = dict(
             sorted(session["cur_loc_enemies"].items(), key=lambda item: item[1]["health"]))
         print(session["cur_person_name"], session["cur_person_type"], session["turns"])
@@ -238,10 +246,19 @@ def webhook(session):
 
 
 
-
-
     elif action == 'roll_20_dice':
+        session["roll_dice_additions"] = ''
+        session["reroll_dice"] = 0
         session["roll_dice_result"] = roll_dice(20, 1)
+        if session["roll_dice_result"] < 10 and session["coins"] > 0:
+            session[
+                "roll_dice_additions"] += "Не хотите ли перебросить кубик? у вас есть золотая монета."
+            session["reroll_dice"] = 1
+        if session["roll_dice_result"] == 20:
+            session[
+                "roll_dice_additions"] += "И это критическая удача! Вы нашли золотую монету! За неё вы можете перебросить кубик ещё раз."
+            session['coins'] += 1
+
     elif action == 'live_check':
 
         if session["roll_dice_result"] >= 10:
@@ -307,7 +324,7 @@ def webhook(session):
 
         if session["roll_dice_result"] + session["players_data"][session["cur_person_name"]]["stats"][
             "intelligence"] < 12 or artefacts == []:
-            artefact_part_response += "К сожалению вы не нашли никаких артефактов"
+            artefact_part_response += "К сожалению, вы не нашли никаких артефактов"
         else:
             found_artefact = random.choice(artefacts)
             artefacts.pop(artefacts.index(found_artefact))
@@ -318,7 +335,7 @@ def webhook(session):
             for effect, effect_name in effects:
                 ar_dp += f'{effect} к {make_agree_with_num(translations[effect_name], effect)}, '
             ar_dp = ar_dp[:-2]
-            artefact_part_response += f'Поздравляю вы нашли {translations[found_artefact]}, он даёт {ar_dp}.'
+            artefact_part_response += f'Поздравляю, вы нашли {translations[found_artefact]}, он даёт {ar_dp}.'
         session["artefact_part_response"] = artefact_part_response
     elif action == 'enemy_move':
         print("enemy_move")
@@ -331,10 +348,10 @@ def webhook(session):
             print(attack_res)
             if attack_res == 1:
                 damage = roll_dice(4, session["cur_loc_enemies"][session["cur_person_name"]]["attack"])
-                enemy_move_prompt = f'{target}, {translations[session["cur_person_name"].split("-")[0]]}-{session["cur_person_name"].split("-")[1]} {random.choice(enemies_attack_prompt["usual"])}. Он наносит {damage} урона.'
 
-                session['players_data'][target]["health"] -= damage
-                if session['players_data'][target]["health"] < 0:
+                session['players_data'][target]["health"] = max(0, session['players_data'][target]["health"] - damage)
+                enemy_move_prompt = f'{target}, {translations[session["cur_person_name"].split("-")[0]]}-{session["cur_person_name"].split("-")[1]} {random.choice(enemies_attack_prompt["usual"])}. Он наносит {damage} урона. У тебя осталось {session["players_data"][target]["health"]} здоровья. '
+                if session['players_data'][target]["health"] <= 0:
                     session['players_data'][target]["is_dead"] = True
             else:
                 enemy_move_prompt = f'{target}, {translations[session["cur_person_name"].split("-")[0]]}-{session["cur_person_name"].split("-")[1]} {random.choice(enemies_attack_prompt["missed"])}. Он не наносит урона.'
@@ -352,9 +369,10 @@ def webhook(session):
         player_hero_type = session["players"][session["cur_person_name"]]
         if session["roll_dice_result"] + session["players_data"][session["cur_person_name"]]["stats"]["strength"] >= \
                 session["cur_loc_enemies"][target]["defense"]:
-            damage = roll_dice(8, 1)
-            attack_response += f'{session["cur_person_name"]}, {random.choice(hero_attack_prompt[player_hero_type]["usual"])}. Ты нанёс {translations[target.split("-")[0]]}-{target.split("-")[1]} {damage} урона.'
-            session["cur_loc_enemies"][target]["health"] -= damage
+            damage = roll_dice(6, 2)
+
+            session["cur_loc_enemies"][target]["health"] = max(0, session["cur_loc_enemies"][target]["health"] - damage)
+            attack_response += f'{session["cur_person_name"]}, {random.choice(hero_attack_prompt[player_hero_type]["usual"])}. Ты нанёс {translations[target.split("-")[0]]}-{target.split("-")[1]} {damage} урона. У него осталось {session["cur_loc_enemies"][target]["health"]} здоровья. '
         else:
             attack_response += f'{session["cur_person_name"]}, {random.choice(hero_attack_prompt[player_hero_type]["missed"])}. Ты не нанёс {translations[target.split("-")[0]]}-{target.split("-")[1]} урона.'
         if session["cur_loc_enemies"][target]["health"] <= 0:
@@ -379,8 +397,10 @@ def webhook(session):
             session["success_ability_use"] = 0
     elif action == "inventory":
         if not session["players_data"][session["cur_person_name"]]["inventory"]:
+            session["is_where_artefacts"] = 0
             session["inventory_response"] = "В твоём инвентаре ничего нет, но это не повод растраиваться!"
         else:
+            session["is_where_artefacts"] = 1
             in_text = ""
             for item in session["players_data"][session["cur_person_name"]]["inventory"]:
                 in_text += f'{translations[item]}, '
