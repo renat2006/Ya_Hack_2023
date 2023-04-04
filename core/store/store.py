@@ -94,7 +94,7 @@ translations = {
     "sands_of_time": "Пески времени",
     "crown_of_mind": "Корона разума",
     "pardise_flower": "Райский цветок",
-    "death_worm": "Песчанный червь",
+    "death_worm": "Песчаный червь",
     "zimogor": "Зимогор",
     "ghost": "Призрак",
     "healing": "Лечение природы",

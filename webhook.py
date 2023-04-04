@@ -151,6 +151,9 @@ def webhook(session):
         hero_prompt += ". Пропусти их (он обращается к охранику) - они со мной."
         session["hero_prompt"] = hero_prompt
     elif action == 'history':
+        print(list(locations.keys())[session["location_number"]])
+        session["location_sound"] = locations_data_files[list(locations.keys())[session["location_number"]]]["sound"]
+        print(session["location_sound"])
         session["history_part"] = locations[list(locations.keys())[session["location_number"]]]["prehistory"]
 
 
@@ -176,7 +179,7 @@ def webhook(session):
             "artefacts": list(eval(location_data[4]))
         }
         session["location_image"] = locations_data_files[str(location_data[1])]["image"]
-        session["location_sound"] = locations_data_files[str(location_data[1])]["sound"]
+
         print(session["cur_location_info"])
         turns = {}
         enemies_dict = {}
